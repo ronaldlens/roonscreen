@@ -3,10 +3,9 @@ import pprint
 
 import requests
 import roonapi
-from PySide6.QtGui import QImage, QPixmap
+from PySide6.QtGui import QImage, QPixmap, QScreen
 from roonapi import RoonApi, RoonDiscovery
 from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QLabel, QPushButton
-
 
 appinfo = {
     "extension_id": "Ronald's roon screen",
@@ -31,7 +30,8 @@ class MainWindow(QMainWindow):
         super().__init__()
         print("starting main window")
         self.setWindowTitle("Roon Screen")
-        self.setGeometry(100, 100, 800, 600)
+        scrGeometry = QScreen.availableGeometry(QApplication.primaryScreen())
+        self.setGeometry(scrGeometry)
         self._walbum = QLabel(self)
         self._walbum.setGeometry(25,25, 500, 500)
 
@@ -76,7 +76,7 @@ class MainWindow(QMainWindow):
     def get_info(self):
         zone = self._roonapi.zone_by_output_id(self._output_id)
         now_playing = zone["now_playing"]
-        artis_image_key = now_playing["artist_image_keys"]
+        artis_image_key = now_playing["artist_image_keys"][0]
         image_key = now_playing["image_key"]
         three_line = now_playing["three_line"]
         song = three_line["line1"]
