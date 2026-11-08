@@ -33,9 +33,9 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Roon Screen")
         scrGeometry = QScreen.availableGeometry(QApplication.primaryScreen())
         self.setGeometry(scrGeometry)
-        self._album_height = scrGeometry.height()
+        self._album_height = scrGeometry.height()-40
         self._walbum = QLabel(self)
-        self._walbum.setGeometry(25,25, self._album_height, self._album_height)
+        self._walbum.setGeometry(20,20, self._album_height, self._album_height)
 
 
     def init_roon(self):
