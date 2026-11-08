@@ -25,6 +25,7 @@ class MainWindow(QMainWindow):
     _song_name = None
     _album_art = None
     _walbum = None
+    _album_height = None
 
     def __init__(self):
         super().__init__()
@@ -32,8 +33,9 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Roon Screen")
         scrGeometry = QScreen.availableGeometry(QApplication.primaryScreen())
         self.setGeometry(scrGeometry)
+        self._album_height = scrGeometry.height()
         self._walbum = QLabel(self)
-        self._walbum.setGeometry(25,25, 500, 500)
+        self._walbum.setGeometry(25,25, self._album_height, self._album_height)
 
 
     def init_roon(self):
@@ -90,7 +92,7 @@ class MainWindow(QMainWindow):
             self.update_album()
 
     def update_album(self):
-        img_url = self._roonapi.get_image(self._album_art, width=500, height=500)
+        img_url = self._roonapi.get_image(self._album_art, width=self._album_height, height=self._album_height)
         img = QImage()
         img.loadFromData(requests.get(img_url).content)
         self._walbum.setPixmap(QPixmap.fromImage(img))
