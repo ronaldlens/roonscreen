@@ -34,14 +34,15 @@ class MainWindow(QMainWindow):
     
     def __init__(self):
         super().__init__()
-        print("starting main window")
         self.setWindowTitle("Roon Screen")
         scrGeometry = QScreen.availableGeometry(QApplication.primaryScreen())
+        print(scrGeometry.width())
+        print(scrGeometry.height())
         self.setGeometry(scrGeometry)
-        main_layout = QHBoxLayout()
         self._album_height = scrGeometry.height()-60
         self._w_album_img = QLabel()
         self._w_album_img.setFixedSize(self._album_height, self._album_height)
+        main_layout = QHBoxLayout()
         main_layout.addWidget(self._w_album_img)
 
         v1layout = QVBoxLayout()
