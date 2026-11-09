@@ -2,10 +2,10 @@ import sys
 import pprint
 
 import requests
-import roonapi
 from PySide6.QtGui import QImage, QPixmap, QScreen
 from roonapi import RoonApi, RoonDiscovery
-from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QLabel, QPushButton
+from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QLabel, QWidget, QSizePolicy
+from PySide6.QtCore import Qt
 
 appinfo = {
     "extension_id": "Ronald's roon screen",
@@ -23,20 +23,47 @@ class MainWindow(QMainWindow):
     _output_id = None
     _roonapi = None
     _song_name = None
+    _album = None
+    _artist = None
     _album_art = None
-    _walbum = None
     _album_height = None
-
+    _w_album_img = None
+    _w_song = None
+    _w_album = None
+    _w_artist = None
+    
     def __init__(self):
         super().__init__()
         print("starting main window")
         self.setWindowTitle("Roon Screen")
         scrGeometry = QScreen.availableGeometry(QApplication.primaryScreen())
         self.setGeometry(scrGeometry)
-        self._album_height = scrGeometry.height()-40
-        self._walbum = QLabel(self)
-        self._walbum.setGeometry(20,20, self._album_height, self._album_height)
+        main_layout = QHBoxLayout()
+        self._album_height = scrGeometry.height()-60
+        self._w_album_img = QLabel()
+        self._w_album_img.setFixedSize(self._album_height, self._album_height)
+        main_layout.addWidget(self._w_album_img)
 
+        v1layout = QVBoxLayout()
+        self._w_song = QLabel()
+        self._w_song.setAlignment(Qt.AlignCenter)
+        self._w_song.setStyleSheet("font-size: 64px;")
+        self._w_artist = QLabel()
+        self._w_artist.setAlignment(Qt.AlignCenter)
+        self._w_artist.setStyleSheet("font-size: 56px;")
+        self._w_album = QLabel()
+        self._w_album.setAlignment(Qt.AlignCenter)
+        self._w_album.setStyleSheet("font-size: 56px;")
+        filler1 = QWidget()
+        filler1.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        v1layout.addWidget(self._w_song)
+        v1layout.addWidget(self._w_artist)
+        v1layout.addWidget(self._w_album)
+        v1layout.addWidget(filler1)
+        main_layout.addLayout(v1layout)
+        widget = QWidget()
+        widget.setLayout(main_layout)
+        self.setCentralWidget(widget)
 
     def init_roon(self):
         print("setting up roon")
@@ -58,7 +85,7 @@ class MainWindow(QMainWindow):
 
         print(self._zone_id)
 
-    def state_callback(self, event, changed_ids):
+    def state_callback(self, _event, _changed_ids):
         self.get_info()
 
 
@@ -88,6 +115,8 @@ class MainWindow(QMainWindow):
         seek_pos = now_playing["seek_position"]
         if self._song_name != song:
             self._song_name = song
+            self._album = album
+            self._artist = artist
             self._album_art = image_key
             self.update_album()
 
@@ -95,7 +124,10 @@ class MainWindow(QMainWindow):
         img_url = self._roonapi.get_image(self._album_art, width=self._album_height, height=self._album_height)
         img = QImage()
         img.loadFromData(requests.get(img_url).content)
-        self._walbum.setPixmap(QPixmap.fromImage(img))
+        self._w_album_img.setPixmap(QPixmap.fromImage(img))
+        self._w_song.setText(self._song_name)
+        self._w_artist.setText(self._artist)
+        self._w_album.setText(self._album)
 
 print("starting Roonscreen")
 app = QApplication(sys.argv)
