@@ -130,6 +130,10 @@ class MainWindow(QMainWindow):
         self._w_song.setText(self._song_name)
         self._w_artist.setText(self._artist)
         self._w_album.setText(self._album)
+        scr = QScreen
+        w = scr.availableGeometry(QApplication.primaryScreen()).width
+        h = scr.availableGeometry(QApplication.primaryScreen()).height
+        self.setGeometry(0,0,w,h)
 
 print("starting Roonscreen")
 app = QApplication(sys.argv)
