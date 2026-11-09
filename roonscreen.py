@@ -38,7 +38,7 @@ class MainWindow(QMainWindow):
         scrGeometry = QScreen.availableGeometry(QApplication.primaryScreen())
         print(scrGeometry.width())
         print(scrGeometry.height())
-        self.setGeometry(scrGeometry)
+        self.setGeometry(0,0,1024,1080)
         self._album_height = scrGeometry.height()-60
         self._w_album_img = QLabel()
         self._w_album_img.setFixedSize(self._album_height, self._album_height)
