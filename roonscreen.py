@@ -4,7 +4,7 @@ import pprint
 import requests
 from PySide6.QtGui import QImage, QPixmap, QScreen
 from roonapi import RoonApi, RoonDiscovery
-from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QLabel, QWidget, QSizePolicy
+from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QLabel, QWidget, QSizePolicy, QStyle, QPushButton
 from PySide6.QtCore import Qt
 
 appinfo = {
@@ -45,6 +45,7 @@ class MainWindow(QMainWindow):
         main_layout.addWidget(self._w_album_img)
 
         v1layout = QVBoxLayout()
+        v1layout.setSpacing(30)
         self._w_song = QLabel()
         self._w_song.setAlignment(Qt.AlignCenter)
         self._w_song.setStyleSheet("font-size: 64px; font-weight: bold;")
